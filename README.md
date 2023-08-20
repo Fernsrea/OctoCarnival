@@ -58,6 +58,8 @@ For example:
 
 This command will resize the `input.jpg` image by a scale factor of 1.3 and save the result as `output.jpg`.
 
+The program waits for user to enter a key to close the images and end the program.
+
 ---
 
 **CMakeLists.txt**
