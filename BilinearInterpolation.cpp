@@ -2,27 +2,8 @@
 #include <string>
 #include <opencv2/opencv.hpp>
 
-int main(int argc, char* argv[]) {
-    // Check the command line input
-    if (argc != 4) {
-        std::cout << "Usage: " << argv[0] << " <input_image> <output_image> <scale>" << std::endl;
-        return 1;
-    }
-
-    std::string inputFile = argv[1];
-    std::string outputFile = argv[2];
-
-    // Read the input image
-    cv::Mat inputImage = cv::imread(inputFile);
-    if (inputImage.empty()) {
-        std::cout << "Could not open or read the image: " << inputFile << std::endl;
-        return 2;
-    }
-
-    // Amount of scaling to be applied on the image
-    double scale = std::stod(argv[3]);
-
-    // Apply image processing
+cv::Mat bilinearInterpolation(const cv::Mat& inputImage, float scale)
+{
     // Calculate the new dimensions
     int newWidth = static_cast<int>(inputImage.cols * scale);
     int newHeight = static_cast<int>(inputImage.rows * scale);
@@ -66,6 +47,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    return outputImage;
+}
+
+int display(const std::string& outputFile, const cv::Mat& outputImage, const cv::Mat& inputImage)
+{
     // Write the processed image to the output file
     if (!cv::imwrite(outputFile, outputImage)) {
         std::cout << "Could not write the image: " << outputFile << std::endl;
@@ -76,6 +62,35 @@ int main(int argc, char* argv[]) {
     cv::imshow("Output Image", outputImage);
     cv::imshow("Input Image", inputImage);
     cv::waitKey(0); // Wait for a key press
+
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
+    // Check the command line input
+    if (argc != 4) {
+        std::cout << "Usage: " << argv[0] << " <input_image> <output_image> <scale>" << std::endl;
+        return 1;
+    }
+
+    std::string inputFile = argv[1];
+    std::string outputFile = argv[2];
+
+    // Read the input image
+    cv::Mat inputImage = cv::imread(inputFile);
+    if (inputImage.empty()) {
+        std::cout << "Could not open or read the image: " << inputFile << std::endl;
+        return 2;
+    }
+
+    // Amount of scaling to be applied on the image
+    float scale = std::stof(argv[3]);
+
+    // Apply image processing
+    cv::Mat outputImage = bilinearInterpolation(inputImage, scale);
+
+    // Write the output file and display it
+    display(outputFile, outputImage, inputImage);
     
     std::cout << "Image processing completed successfully." << std::endl;
 
