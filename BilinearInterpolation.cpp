@@ -58,6 +58,8 @@ int display(const std::string& outputFile, const cv::Mat& outputImage, const cv:
         return 3;
     }
 
+    std::cout << "New dimensions: " << outputImage.cols << " x " << outputImage.rows << std::endl;
+
     // Open the processed image
     cv::imshow("Output Image", outputImage);
     cv::imshow("Input Image", inputImage);
@@ -82,6 +84,8 @@ int main(int argc, char* argv[]) {
         std::cout << "Could not open or read the image: " << inputFile << std::endl;
         return 2;
     }
+
+    std::cout << "Old dimensions: " << inputImage.cols << " x " << inputImage.rows << std::endl;
 
     // Amount of scaling to be applied on the image
     float scale = std::stof(argv[3]);
